@@ -42,7 +42,7 @@ curdir = '/Users/thomas/Projects/dizp/measurements'
 rawfiles = 'raw'
 graphsfolder = 'graphs'
 measurements = ['redirect', 'noredirect']
-labels = ['Legacy 302', 'Transparent']
+labels = ['302 Redirection', 'Transparent Redirection']
 
 data = {}
 ##PARSING PHASE
@@ -54,7 +54,6 @@ for meas in measurements:
         if chunk:
             parsed_meas.append(chunk)
     data[meas] = parsed_meas
-
 
 figsize = (7, 2)
 
@@ -77,7 +76,7 @@ ts_graph_data = getRawStartTransferPair(data)
 ts_graph_data[0] = map(lambda x: x*1000, ts_graph_data[0])
 ts_graph_data[1] = map(lambda x: x*1000, ts_graph_data[1])
 plt.boxplot(ts_graph_data, labels=labels)
-plt.title('Start Transfer delay')
+plt.title('Start Transfer Delay')
 plt.ylabel('Time to first Bytes in [ms]')
 plt.savefig(curdir + '/' + graphsfolder + '/transfer_delay.png')
 plt.close()
@@ -99,6 +98,6 @@ sd_graph_data = getDataTypePair(data, 'speed_download')
 sd_graph_data[0] = map(lambda x: x / 1000000, sd_graph_data[0])
 sd_graph_data[1] = map(lambda x: x / 1000000, sd_graph_data[1])
 plt.boxplot(sd_graph_data, labels=labels, meanline=True)
-plt.title('Download speed')
+plt.title('Download Speed')
 plt.ylabel('Bandwidth in [MB/s]')
 plt.savefig(curdir + '/' + graphsfolder + '/bandwidth.png')
