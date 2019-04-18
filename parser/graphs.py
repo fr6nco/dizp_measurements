@@ -55,7 +55,7 @@ for meas in measurements:
             parsed_meas.append(chunk)
     data[meas] = parsed_meas
 
-figsize = (7, 2)
+figsize = (9, 4)
 
 # Canvas setup
 plt.figure(figsize=figsize)
