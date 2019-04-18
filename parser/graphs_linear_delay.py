@@ -68,6 +68,7 @@ for meas in measurements:
     plt.boxplot(tc_plot, labels=topos, showfliers=False)
     plt.title('Time required to start transfer')
     plt.ylabel('Time in [ms]')
+    plt.xlabel('# of hops between client and surrogate server')
     plt.savefig(curdir + '/' + graphsfolder + '/starttransfer_'+ meas +'.png')
     plt.close()
 
