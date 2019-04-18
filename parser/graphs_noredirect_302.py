@@ -3,7 +3,6 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import os
 
-
 timevals = ['time_connect', 'time_namelookup', 'time_pretransfer', 'time_starttransfer', 'time_redirect', 'time_total']
 intvals = ['size_download', 'speed_download', 'http_code']
 

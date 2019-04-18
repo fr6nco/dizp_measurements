@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="99681f3e-6025-4ca5-8d7d-9143cd7007dc" name="tbo-se2" url="http://tbo-se2">
+        <fileTransfer host="tbo-se2" port="22" rootFolder="/home/tbo/remote" accessType="SFTP" authAgent="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
