@@ -71,15 +71,22 @@ for cnf in config:
         plt.close()
 
         nparr = np.array(tc_plot)
+        print nparr
         mean_arr = np.mean(nparr, axis=1)
-
-        plt.figure(figsize=figsize)
+        err = np.std(nparr, axis=1)
+        print err
         z = np.polyfit(map(int, topos), mean_arr, 1)
         p = np.poly1d(z)
+
+        plt.figure(figsize=figsize)
         plt.plot(map(int, topos),p(map(int, topos)),"r--")
         plt.scatter(map(int, topos), mean_arr)
         plt.savefig(curdir + '/' + graphsfolder + '/startransfer_'+ cnf +'_trendline_'+ meas +'.png')
         plt.close()
 
-
-
+        plt.figure(figsize=figsize)
+        plt.plot(map(int, topos),p(map(int, topos)),"r--")
+        # plt.scatter(map(int, topos), mean_arr)
+        plt.errorbar(map(int, topos), mean_arr, err, linestyle='None', marker='o')
+        plt.savefig(curdir + '/' + graphsfolder + '/startransfer_'+ cnf +'_combo_'+ meas +'.png')
+        plt.close()
