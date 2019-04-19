@@ -25,10 +25,6 @@ def parseFile(file):
                 return None
             if ln[0] == 'http_code' and ln[1] != 200:
                 return None
-            if ln[0] == 'time_starttransfer' and ln[1] >= 10.0:
-                return None
-            if ln[0] == 'time_redirect' and ln[1] >= 10.0:
-                return None
             resdict[ln[0]] = ln[1]
 
         return resdict
@@ -41,35 +37,49 @@ rawfiles = 'linear_delay'
 graphsfolder = 'graphs/linear_delay'
 topos = ['3', '5', '10', '30', '50', '100']
 measurements = ['redirect', 'noredirect']
+config = ['cache', 'nocache']
 
-for meas in measurements:
-    measurement_tc = collections.OrderedDict()
-    for topo in topos:
-        raw_data = []
-        path = '/'.join([curdir, rawfiles, 'results_linear_' + str(topo), meas])
-        for file in os.listdir(path):
-            chunk = parseFile(path + '/' + file)
-            if chunk:
-                raw_data.append(chunk)
+for cnf in config:
+    for meas in measurements:
+        measurement_tc = collections.OrderedDict()
+        for topo in topos:
+            raw_data = []
+            path = '/'.join([curdir, rawfiles, 'results_linear_'+ cnf +'_' + str(topo), meas])
+            for file in os.listdir(path):
+                chunk = parseFile(path + '/' + file)
+                if chunk:
+                    raw_data.append(chunk)
 
-        measurement_tc[topo] = getStartTransferPair(raw_data)
+            measurement_tc[topo] = getStartTransferPair(raw_data)
 
-    figsize = (9, 4)
+        figsize = (9, 4)
 
-    tc_plot = [[]] * len(topos)
+        tc_plot = [[]] * len(topos)
 
-    index = 0
-    for topo in topos:
-        measurement_tc[topo] = map(lambda x: x*1000, measurement_tc[topo])
-        tc_plot[index] = measurement_tc[topo]
-        index += 1
+        index = 0
+        for topo in topos:
+            measurement_tc[topo] = map(lambda x: x*1000, measurement_tc[topo])
+            tc_plot[index] = measurement_tc[topo]
+            index += 1
 
-    plt.figure(figsize=figsize)
-    plt.boxplot(tc_plot, labels=topos, showfliers=False)
-    plt.title('Time required to start transfer')
-    plt.ylabel('Time in [ms]')
-    plt.xlabel('# of hops between client and surrogate server')
-    plt.savefig(curdir + '/' + graphsfolder + '/starttransfer_'+ meas +'.png')
-    plt.close()
+        plt.figure(figsize=figsize)
+        plt.boxplot(tc_plot, labels=topos, showfliers=True)
+        plt.title('Time required to start transfer')
+        plt.ylabel('Time in [ms]')
+        plt.xlabel('# of hops between client and surrogate server')
+        plt.savefig(curdir + '/' + graphsfolder + '/starttransfer_'+ cnf +'_'+ meas +'.png')
+        plt.close()
+
+        nparr = np.array(tc_plot)
+        mean_arr = np.mean(nparr, axis=1)
+
+        plt.figure(figsize=figsize)
+        z = np.polyfit(map(int, topos), mean_arr, 1)
+        p = np.poly1d(z)
+        plt.plot(map(int, topos),p(map(int, topos)),"r--")
+        plt.scatter(map(int, topos), mean_arr)
+        plt.savefig(curdir + '/' + graphsfolder + '/startransfer_'+ cnf +'_trendline_'+ meas +'.png')
+        plt.close()
+
 
 
