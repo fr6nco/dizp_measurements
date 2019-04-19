@@ -39,7 +39,7 @@ def getRawStartTransferPair(data):
 
 curdir = '/Users/thomas/Projects/dizp/measurements'
 rawfiles = 'raw'
-graphsfolder = 'graphs'
+graphsfolder = 'graphs/noredirect_302'
 measurements = ['redirect', 'noredirect']
 labels = ['302 Redirection', 'Transparent Redirection']
 
@@ -65,7 +65,7 @@ tc_graph_data[1] = map(lambda x: x*1000, tc_graph_data[1])
 plt.boxplot(tc_graph_data, labels=labels)
 plt.title('Connect Time (TCP Handshake)')
 plt.ylabel('Time in [ms]')
-plt.savefig(curdir + '/' + graphsfolder + '/connect.png')
+plt.savefig(curdir + '/' + graphsfolder + '/connect.png', dpi=300)
 plt.close()
 
 # Canvas setup
@@ -77,7 +77,7 @@ ts_graph_data[1] = map(lambda x: x*1000, ts_graph_data[1])
 plt.boxplot(ts_graph_data, labels=labels)
 plt.title('Start Transfer Delay')
 plt.ylabel('Time to first Bytes in [ms]')
-plt.savefig(curdir + '/' + graphsfolder + '/transfer_delay.png')
+plt.savefig(curdir + '/' + graphsfolder + '/transfer_delay.png', dpi=300)
 plt.close()
 
 # Canvas setup
@@ -87,7 +87,7 @@ tt_graph_data = getDataTypePair(data, 'time_total')
 plt.boxplot(tt_graph_data, labels=labels)
 plt.title('Total Download Time')
 plt.ylabel('Time in [s]')
-plt.savefig(curdir + '/' + graphsfolder + '/total_time.png')
+plt.savefig(curdir + '/' + graphsfolder + '/total_time.png', dpi=300)
 plt.close()
 
 # Canvas setup
@@ -99,4 +99,4 @@ sd_graph_data[1] = map(lambda x: x / 1000000, sd_graph_data[1])
 plt.boxplot(sd_graph_data, labels=labels, meanline=True)
 plt.title('Download Speed')
 plt.ylabel('Bandwidth in [MB/s]')
-plt.savefig(curdir + '/' + graphsfolder + '/bandwidth.png')
+plt.savefig(curdir + '/' + graphsfolder + '/bandwidth.png', dpi=300)
