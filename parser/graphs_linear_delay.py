@@ -33,14 +33,15 @@ def getStartTransferPair(data):
     return map(lambda x: x['time_redirect'] + x['time_starttransfer'] - x['time_connect'], data)
 
 curdir = '/Users/thomas/Projects/dizp/measurements'
-rawfiles = 'linear_delay'
-graphsfolder = 'graphs/linear_delay'
+rawfiles = 'linear_delay_bad'
+graphsfolder = 'graphs/linear_delay_bad'
 topos = ['3', '5', '10', '30', '50', '100']
 measurements = ['redirect', 'noredirect']
+labels = ['302 Redirection', 'Transparent Redirection']
 config = ['cache', 'nocache']
 
 for cnf in config:
-    for meas in measurements:
+    for idx, meas in enumerate(measurements):
         measurement_tc = collections.OrderedDict()
         for topo in topos:
             raw_data = []
@@ -50,6 +51,10 @@ for cnf in config:
                 if chunk:
                     raw_data.append(chunk)
 
+            if len(raw_data) != 10:
+                print cnf, meas, topo
+                print 'not 10'
+                exit(1)
             measurement_tc[topo] = getStartTransferPair(raw_data)
 
         figsize = (9, 4)
@@ -64,7 +69,7 @@ for cnf in config:
 
         plt.figure(figsize=figsize)
         plt.boxplot(tc_plot, labels=topos, showfliers=True)
-        plt.title('Time Required to Start Transfer')
+        plt.title('Time Required to Start Transfer - ' + str(labels[idx]))
         plt.ylabel('Time in [ms]')
         plt.xlabel('# of hops between client and surrogate server')
         plt.savefig(curdir + '/' + graphsfolder + '/starttransfer_'+ cnf +'_'+ meas +'.png', dpi=300)
@@ -81,7 +86,7 @@ for cnf in config:
         plt.figure(figsize=figsize)
         plt.plot(map(int, topos),p(map(int, topos)),"r--")
         plt.scatter(map(int, topos), mean_arr)
-        plt.title('Time Required to Start Transfer With Linear Regression')
+        plt.title('Time Required to Start Transfer With Linear Regression - ' + str(labels[idx]))
         plt.ylabel('Time in [ms]')
         plt.xlabel('# of hops between client and surrogate server')
         plt.savefig(curdir + '/' + graphsfolder + '/startransfer_'+ cnf +'_trendline_'+ meas +'.png', dpi=300)
@@ -90,7 +95,7 @@ for cnf in config:
         plt.figure(figsize=figsize)
         plt.plot(map(int, topos),p(map(int, topos)),"r--")
         plt.errorbar(map(int, topos), mean_arr, err, linestyle='None', marker='o')
-        plt.title('Time Required to Start Transfer With Linear Regression')
+        plt.title('Time Required to Start Transfer With Linear Regression - ' + str(labels[idx]))
         plt.ylabel('Time in [ms]')
         plt.xlabel('# of hops between client and surrogate server')
         plt.savefig(curdir + '/' + graphsfolder + '/startransfer_'+ cnf +'_combo_'+ meas +'.png', dpi=300)

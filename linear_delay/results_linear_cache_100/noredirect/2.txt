@@ -2,10 +2,10 @@
 http_code: 200
 remote_ip: 10.11.0.100
 size_download: 4708
-speed_download: 50307.000
-time_connect: 0.023s
+speed_download: 31298.000
+time_connect: 0.085s
 time_namelookup: 0.004s
-time_pretransfer: 0.023s
-time_starttransfer: 0.091s
+time_pretransfer: 0.085s
+time_starttransfer: 0.150s
 time_redirect: 0.000s
-time_total: 0.094s
+time_total: 0.150s
