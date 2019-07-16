@@ -42,35 +42,38 @@ curdir = '/Users/thomas/Projects/dizp/measurements'
 rawfiles = ['lb_l7', 'lb_transparent']
 graphsfolder = 'graphs'
 measurements = ['close', 'keepalive']
-labels = ['L7 LB', 'Transparent LB']
+filesize = ['small', 'medium']
+labels = ['L7 Load Balancing', 'Transparent Load Balancing']
 
 # LB -> close, l7 vs transparent
 #       keepalive, l7 vs transparent
 
 for meas in measurements:
-    meas_data = [[]] * len(rawfiles)
-    meas_raw = collections.OrderedDict()
-    for idx, files in enumerate(rawfiles):
-        raw_data = []
-        path = "{}/{}/results_{}_{}_small/res".format(curdir, files, files, meas)
-        if meas == 'close':
-            for file in os.listdir(path):
-                chunk = parseFile(path + '/' + file)
-                if chunk:
-                    raw_data.append(chunk)
-        else:
-            for file in os.listdir(path):
-                chunk = parseMultiMeasurmenetFile(path + '/' + file)
-                if chunk:
-                    raw_data += chunk
-        meas_raw[files] = []
-        meas_raw[files] = getStartTransferPair(raw_data)
-        meas_data[idx] = map(lambda x: x*1000, meas_raw[files])
+    for fsz in filesize:
+        meas_data = [[]] * len(rawfiles)
+        meas_raw = collections.OrderedDict()
+        for idx, files in enumerate(rawfiles):
+            raw_data = []
+            path = "{}/{}/results_{}_{}_{}/res".format(curdir, files, files, meas, fsz)
+            if meas == 'close':
+                for file in os.listdir(path):
+                    chunk = parseFile(path + '/' + file)
+                    if chunk:
+                        raw_data.append(chunk)
+            else:
+                for file in os.listdir(path):
+                    chunk = parseMultiMeasurmenetFile(path + '/' + file)
+                    if chunk:
+                        raw_data += chunk
+            meas_raw[files] = []
+            meas_raw[files] = getStartTransferPair(raw_data)
+            meas_data[idx] = map(lambda x: x*1000, meas_raw[files])
 
-    figsize = (9, 4)
+        figsize = (9, 4)
 
-    plt.figure(figsize=figsize)
-    plt.boxplot(meas_data, labels=labels, showfliers=True)
-    plt.title(meas)
-    plt.savefig(curdir + '/' + graphsfolder + '/lb_l7vstransparent/' + meas + '.png', dpi=300)
-    plt.close()
+        plt.figure(figsize=figsize)
+        plt.boxplot(meas_data, labels=labels, showfliers=True)
+        plt.title('Time Required to Start Transfer - Connection ' + meas.capitalize())
+        plt.ylabel('Time in [ms]')
+        plt.savefig(curdir + '/' + graphsfolder + '/lb_l7vstransparent/' + meas + '_'+ fsz +'.png', dpi=300)
+        plt.close()
