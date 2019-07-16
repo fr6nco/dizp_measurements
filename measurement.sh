@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ '$1' == 'large' ]; then
-	FILE="/largefiles/1GB.zip
+	FILE="/largefiles/1GB.zip"
 fi
 
 if [ '$1' == 'small' ]; then
